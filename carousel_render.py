@@ -154,7 +154,7 @@ def fit_text_block(draw, text, font_path, area_w, area_h, max_size):
     return font, wrap_text(draw, text, font, area_w)
 
 
-def render_block(draw, lines, font, area_x, area_w, y_start, line_gap, fill="white", stroke_width=2, stroke_color="black"):
+def render_block(draw, lines, font, area_x, area_w, y_start, line_gap, fill="black", stroke_width=0, stroke_color="white"):
     """Render multiline text centered horizontally."""
     lh = draw.textbbox((0, 0), "Ay", font=font)[3] - draw.textbbox((0, 0), "Ay", font=font)[1]
     gap = max(lh // line_gap, 2)
@@ -215,13 +215,13 @@ def render_slide(slide, templates, font_bold_path, font_reg_path, out_path):
         lh = draw.textbbox((0, 0), "Ay", font=title_font)[3] - draw.textbbox((0, 0), "Ay", font=title_font)[1]
         gap = max(lh // 3, 2)
         render_block(draw, title_lines, title_font, area["x"], area["w"], y_start, 3,
-                     fill="white", stroke_width=2, stroke_color="black")
+                     fill="black", stroke_width=0, stroke_color="white")
         y_start += len(title_lines) * (lh + gap) - gap + 15
 
     # Render subjudul
     if sub_lines:
         render_block(draw, sub_lines, sub_font, area["x"], area["w"], y_start, 3,
-                     fill="white", stroke_width=2, stroke_color="black")
+                     fill="black", stroke_width=0, stroke_color="white")
 
     img.save(out_path)
     parts = [f"J:{judul[:30]}" if judul else ""]
