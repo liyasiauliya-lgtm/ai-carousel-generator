@@ -53,5 +53,22 @@ RESULT/
 | content | 60, 250, 960, 580 |
 | cta | 60, 350, 960, 380 |
 
+## Style teks
+
+Edit 3 baris di bagian atas `carousel_render.py`:
+
+```python
+TEXT_FILL = "black"       # warna teks: white / black / #FF5733 / dll
+STROKE_WIDTH = 0          # 0=tanpa stroke, 2=stroke tipis, 4=stroke tebel
+STROKE_FILL = "white"     # warna stroke (kalo STROKE_WIDTH > 0)
+```
+
+| Background | `TEXT_FILL` | `STROKE_WIDTH` | `STROKE_FILL` |
+|------------|-------------|----------------|---------------|
+| Terang (putih/pastel) | `"black"` | 0 | `"white"` |
+| Gelap (item/pekat) | `"white"` | 2 | `"black"` |
+| Ramai/penuh warna | `"white"` | 4 | `"black"` |
+| Custom color | `"#FF5733"` | 0 | `"white"` |
+
 **Font auto-scale** — ukuran ngecil otomatis kalo teks panjang, biar selalu muat di bounding box.
 **Pixel-perfect** — tiap jalan hasilnya persis sama.
