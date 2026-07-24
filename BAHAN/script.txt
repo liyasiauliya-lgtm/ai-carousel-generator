@@ -1,0 +1,4 @@
+1 COVER_JUDUL:Capek boleh, istirahat wajar_SUBJUDUL:Tapi satu hal yang pasti: Jangan pernah menyerah.
+2 CONTENT_JUDUL:Tidak semua berjalan sesuai rencana_SUBJUDUL:Ada kalanya langkah terasa berat. Menangis dan kecewa itu manusiawi, tapi jangan biarkan itu menghentikanmu.
+3 CONTENT_JUDUL:Ingat kenapa kamu memulai_SUBJUDUL:Setiap kegagalan adalah pelajaran yang membentuk mentalmu. Beri waktu untuk bernapas, susun ulang strategimu, dan bangkit lagi.
+4 CTA_JUDUL:Siapa yang butuh pengingat ini?SUbjUDUL:Tag temanmu yang sedang berjuang dan save postingan ini untuk dibaca lagi saat kamu merasa lelah!
