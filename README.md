@@ -1,35 +1,34 @@
-# Carousel Renderer
+# Carousel Renderer v2
 
-Template-based carousel generator. Baca BAHAN/script.txt → render teks di template → output ke RESULT/
+Template-based carousel generator. **Judul bold gede** + **Subjudul normal kecil** — auto-center, auto-scale.
 
 ## Cara Pakai
 
-### 1. Siapin folder BAHAN/
+### 1. Isi folder BAHAN/
 
 ```
 BAHAN/
 ├── cover.png        ← template background 1080x1080
 ├── content.png      ← template background 1080x1080
 ├── cta.png          ← template background 1080x1080
-├── font.ttf         ← font yg dipake (opsional, kalo ga ada fallback ke Arial)
+├── font.ttf         ← font (opsional, fallback Arial)
 └── script.txt       ← isi konten
 ```
 
 ### 2. Format script.txt
 
 ```
-1 COVER_5 Tips Public Speaking
-2 CONTENT_Tips pertama: kontak mata dengan audiens
-3 CONTENT_Tips kedua: suara jelas dan intonasi
-4 CTA_Simpan postingan ini buat latihan!
+1 COVER_JUDUL:5 Tips Public Speaking_SUBJUDUL:Pemula pun pasti bisa!
+2 CONTENT_JUDUL:Kontak Mata_SUBJUDUL:Tatap audiens bergantian biar feel connected
+3 CONTENT_JUDUL:Intonasi Suara_SUBJUDUL:Jangan monoton, naik-turunin kayak ngobrol
+4 CTA_JUDUL:Follow for more!_SUBJUDUL:Simpan buat latihan tiap hari
 ```
 
-- `NUMBER` — urutan slide
-- `TYPE` — `COVER` / `CONTENT` / `CTA`
-- `_` — separator
-- `text` — isi konten, auto-word-wrap, auto-scale font biar muat
-
-Template untuk slide CONTENT dipake terus kalo ada lebih dari 1.
+- `TYPE` → `COVER` / `CONTENT` / `CTA`
+- `JUDUL:` → teks bold, lebih gede, auto-scale
+- `SUBJUDUL:` → teks normal, lebih kecil
+- Kalo cuma `JUDUL:` doang (ga ada `SUBJUDUL`), judul aja
+- Kalo ga pake format `JUDUL:`/`SUBJUDUL:` sama sekali, seluruh teks jadi judul
 
 ### 3. Jalankan
 
@@ -46,9 +45,13 @@ RESULT/
 └── 04_cta.png
 ```
 
-## Catatan
+## Bounding box teks (bisa lo tweak di script)
 
-- Font **auto-scale** — panjang teks → font mengecil biar selalu muat di area
-- Posisi teks **center** horizontal & vertikal di dalam bounding box tiap tipe
-- Teks pake **stroke hitam + fill putih** biar kebaca di background apapun
-- Ga perlu koneksi internet, ga perlu LLM, murni Python lokal
+| Tipe | Area (x, y, w, h) |
+|------|-------------------|
+| cover | 60, 300, 960, 480 |
+| content | 60, 250, 960, 580 |
+| cta | 60, 350, 960, 380 |
+
+**Font auto-scale** — ukuran ngecil otomatis kalo teks panjang, biar selalu muat di bounding box.
+**Pixel-perfect** — tiap jalan hasilnya persis sama.
