@@ -25,6 +25,12 @@ MAX_TITLE_SIZE = 100
 MAX_SUB_SIZE = 60
 TITLE_RATIO = 1.6  # title 1.6x lebih gede dari subtitle
 
+# ─── Style teks ───────────────────────────────────────────────────────
+# Ganti sesuai template lo:
+TEXT_FILL = "black"       # warna teks: white / black / #FF5733 / dll
+STROKE_WIDTH = 0          # 0 = tanpa stroke, 2 = stroke tipis, 4 = stroke tebel
+STROKE_FILL = "white"     # warna stroke (kalo STROKE_WIDTH > 0)
+
 
 # ─── Parsing ──────────────────────────────────────────────────────────
 
@@ -154,7 +160,7 @@ def fit_text_block(draw, text, font_path, area_w, area_h, max_size):
     return font, wrap_text(draw, text, font, area_w)
 
 
-def render_block(draw, lines, font, area_x, area_w, y_start, line_gap, fill="black", stroke_width=0, stroke_color="white"):
+def render_block(draw, lines, font, area_x, area_w, y_start, line_gap, fill=TEXT_FILL, stroke_width=STROKE_WIDTH, stroke_color=STROKE_FILL):
     """Render multiline text centered horizontally."""
     lh = draw.textbbox((0, 0), "Ay", font=font)[3] - draw.textbbox((0, 0), "Ay", font=font)[1]
     gap = max(lh // line_gap, 2)
@@ -215,13 +221,13 @@ def render_slide(slide, templates, font_bold_path, font_reg_path, out_path):
         lh = draw.textbbox((0, 0), "Ay", font=title_font)[3] - draw.textbbox((0, 0), "Ay", font=title_font)[1]
         gap = max(lh // 3, 2)
         render_block(draw, title_lines, title_font, area["x"], area["w"], y_start, 3,
-                     fill="black", stroke_width=0, stroke_color="white")
+                     fill=TEXT_FILL, stroke_width=STROKE_WIDTH, stroke_color=STROKE_FILL)
         y_start += len(title_lines) * (lh + gap) - gap + 15
 
     # Render subjudul
     if sub_lines:
         render_block(draw, sub_lines, sub_font, area["x"], area["w"], y_start, 3,
-                     fill="black", stroke_width=0, stroke_color="white")
+                     fill=TEXT_FILL, stroke_width=STROKE_WIDTH, stroke_color=STROKE_FILL)
 
     img.save(out_path)
     parts = [f"J:{judul[:30]}" if judul else ""]
