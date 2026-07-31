@@ -144,7 +144,7 @@ def render_slide(slide: dict, index: int, mode: str = "script") -> str:
     tipe = (slide.get("type") or cls or "content").lower()
 
     # Card template mode — Judul.html (cover) / content.html (content, cta)
-    if mode == "json" and tipe in CARD_TEMPLATES:
+    if tipe in CARD_TEMPLATES:
         tpl = CARD_TEMPLATES[tipe]
         frame = slide.get("frame", CARD_FRAME)
         front = slide.get("front", tpl["front"])
@@ -156,8 +156,8 @@ def render_slide(slide: dict, index: int, mode: str = "script") -> str:
         subjudul = esc(slide.get("subjudul", "")).replace("\n", "<br>")
         return f"""
     <div class="slide v3-slide card-slide {cls}{active}" id="slide-{n}">
-      <img class="layer-frame" src="{fetch_b64(frame)}" alt="frame">
-      <img class="layer-front" src="{fetch_b64(front)}" alt="front">
+      <img class="layer-frame" src="{fetch_b64(frame)}" alt="frame" crossorigin="anonymous" referrerpolicy="no-referrer">
+      <img class="layer-front" src="{fetch_b64(front)}" alt="front" crossorigin="anonymous" referrerpolicy="no-referrer">
       <div class="judul-wrap"><div class="judul" style="color:{judul_color};font-size:{judul_size}px;">{judul}</div></div>
       <div class="subjudul" style="color:{sub_color};font-size:{sub_size}px;">{subjudul}</div>
     </div>"""
@@ -243,6 +243,7 @@ def generate_html(slides, embedded_bg, mode="script"):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   *, *::before, *::after {{ margin: 0; padding: 0; box-sizing: border-box; }}
   body {{
@@ -403,6 +404,11 @@ def generate_html(slides, embedded_bg, mode="script"):
 
 <script>
 (function() {{
+  window.addEventListener('error', function(e) {{
+    var st = document.getElementById('exportStatus');
+    if (st && e.message) st.textContent = 'Error: ' + e.message;
+  }});
+
   const slides = document.querySelectorAll('.slide');
   const dots = document.querySelectorAll('.dot');
   let current = 0;
@@ -432,75 +438,81 @@ def generate_html(slides, embedded_bg, mode="script"):
   window.addEventListener('resize', fitSlides);
   fitSlides();
 
-  /* ─── Export PNG 1080x1350 ─── */
-  const styles = document.querySelector('style').innerHTML;
-  const fontFamily = '{font_family}';
+  /* ─── Export PNG 1080x1350 (html2canvas, stabil lintas-browser) ─── */
   const prog = document.getElementById('progress');
   const status = document.getElementById('exportStatus');
+  const downloadBtn = document.getElementById('downloadBtn');
 
-  document.getElementById('downloadBtn').addEventListener('click', async () => {{
+  function sleep(ms) {{ return new Promise(r => setTimeout(r, ms)); }}
+
+  downloadBtn.addEventListener('click', async () => {{
+    if (typeof html2canvas === 'undefined') {{
+      status.textContent = 'Gagal load library html2canvas (cek koneksi internet), coba refresh halaman.';
+      return;
+    }}
+
     const total = slides.length;
     prog.textContent = '0/' + total;
     status.textContent = '';
+    downloadBtn.disabled = true;
+
+    const originalActiveIndex = current;
+    // Matikan transisi opacity supaya slide langsung kelihatan penuh saat difoto
+    slides.forEach(s => {{ s.style.transition = 'none'; }});
 
     for (let i = 0; i < total; i++) {{
       const slide = slides[i];
-      prog.textContent = (i+1) + '/' + total;
+      prog.textContent = (i + 1) + '/' + total;
 
-      // Ambil background dari computed style — aman buat gradient, solid, dan data URI
-      const cs = getComputedStyle(slide);
-      const bg = (cs.backgroundImage && cs.backgroundImage !== 'none')
-        ? cs.backgroundImage : (cs.backgroundColor || '#000');
+      // Tampilkan slide ke-i secara penuh (tanpa scale preview) supaya html2canvas
+      // menangkap ukuran asli 1080x1350
+      slides.forEach(s => s.classList.remove('active'));
+      slide.classList.add('active');
+      const prevTransform = slide.style.transform;
+      slide.style.transform = 'none';
 
-      // Clone slide, buang class "slide" biar opacity:0 ga nular ke export
-      const clone = slide.cloneNode(true);
-      clone.classList.remove('slide');
-      clone.classList.remove('active');
-      const isV3 = clone.classList.contains('v3-slide');
-      clone.style.cssText = 'position:relative;width:1080px;height:1350px;overflow:hidden;'
-        + 'transform:none;left:auto;top:auto;opacity:1;visibility:visible;'
-        + 'display:flex;flex-direction:column;justify-content:center;align-items:center;'
-        + 'background:' + bg + ';background-size:cover;background-position:center;'
-        + (isV3 ? '' : 'padding:108px;');
-
-      const htmlContent = '<style>' + styles + '</style>'
-        + '<div style="font-family:' + fontFamily + ';width:1080px;height:1350px;">'
-        + clone.outerHTML + '</div>';
-
-      const svgData = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
-        '<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350">'
-        + '<foreignObject width="1080" height="1350">'
-        + '<div xmlns="http://www.w3.org/1999/xhtml">' + htmlContent + '</div>'
-        + '</foreignObject></svg>'
-      );
+      // Kasih waktu 1 frame biar browser selesai layout/paint sebelum di-screenshot
+      await sleep(60);
 
       try {{
-        const img = await new Promise((resolve, reject) => {{
-          const img = new Image();
-          img.onload = () => resolve(img);
-          img.onerror = reject;
-          img.src = svgData;
+        const canvas = await html2canvas(slide, {{
+          width: 1080,
+          height: 1350,
+          windowWidth: 1080,
+          windowHeight: 1350,
+          scale: 1,
+          backgroundColor: null,
+          useCORS: true,
+          allowTaint: true,
+          logging: false
         }});
 
-        const canvas = document.createElement('canvas');
-        canvas.width = 1080;
-        canvas.height = 1350;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, 1080, 1350);
-
         const link = document.createElement('a');
-        link.download = 'slide_' + String(i+1).padStart(2,'0') + '.png';
+        link.download = 'slide_' + String(i + 1).padStart(2, '0') + '.png';
         link.href = canvas.toDataURL('image/png');
+        document.body.appendChild(link);
         link.click();
+        link.remove();
+
+        // jeda kecil antar-download biar browser ga nge-block popup/download beruntun
+        await sleep(250);
       }} catch (e) {{
-        status.textContent = 'Error slide ' + (i+1) + ': ' + e.message;
+        status.textContent = 'Error slide ' + (i + 1) + ': ' + e.message;
         console.error(e);
+      }} finally {{
+        slide.style.transform = prevTransform;
       }}
     }}
 
+    // kembalikan tampilan seperti semula
+    slides.forEach(s => {{ s.style.transition = ''; }});
+    goTo(originalActiveIndex);
+    fitSlides();
+
+    downloadBtn.disabled = false;
     prog.textContent = 'Done!';
-    status.textContent = total + ' PNG downloaded (1080x1350).';
-  }});
+    status.textContent = total + ' PNG berhasil didownload (1080x1350).';
+  }});  }});
 }})();
 </script>
 </body>
