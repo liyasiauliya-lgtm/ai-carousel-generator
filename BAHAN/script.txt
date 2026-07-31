@@ -1,4 +1,5 @@
-1 COVER_JUDUL:Capek boleh, istirahat wajar_SUBJUDUL:Tapi satu hal yang pasti: Jangan pernah menyerah.
-2 CONTENT_JUDUL:Tidak semua berjalan sesuai rencana_SUBJUDUL:Ada kalanya langkah terasa berat. Menangis dan kecewa itu manusiawi, tapi jangan biarkan itu menghentikanmu.
-3 CONTENT_JUDUL:Ingat kenapa kamu memulai_SUBJUDUL:Setiap kegagalan adalah pelajaran yang membentuk mentalmu. Beri waktu untuk bernapas, susun ulang strategimu, dan bangkit lagi.
-4 CTA_JUDUL:Siapa yang butuh pengingat ini?SUbjUDUL:Tag temanmu yang sedang berjuang dan save postingan ini untuk dibaca lagi saat kamu merasa lelah!
+1 COVER_Kamu Nggak Lagi Sendiri_SUBJUDUL:5 hal yang diam-diam orang butuhkan waktu mental health lagi jelek
+2 CONTENT_1. Hening yang Nggak Perlu Diisi_SUBJUDUL:Orang lain boleh diem bareng kamu tanpa nanya kenapa
+3 CONTENT_2. Diakui Tanpa Harus Jelas_SUBJUDUL:Kadang "aku liat kamu capek banget" udah cukup. Nggak perlu dipaksa cerita
+4 CONTENT_3. Izin Untuk Berhenti_SUBJUDUL:Nggak harus produktif. Rebahan seharian bukan malas — itu survival
+5 CTA_Jangan Dipendem Sendiri_SUBJUDUL:Save. Kirim ke teman yang lagi butuh. Kamu penting 🤍

@@ -1,0 +1,22 @@
+{
+  "slides": [
+    {
+      "num": 1,
+      "type": "cover",
+      "judul": "Judul line 1\nJudul line 2",
+      "subjudul": "Sub Judul"
+    },
+    {
+      "num": 2,
+      "type": "content",
+      "judul": "Judul line 1\nJudul line 2",
+      "subjudul": "Sub Judul"
+    },
+    {
+      "num": 3,
+      "type": "cta",
+      "judul": "Judul line 1\nJudul line 2",
+      "subjudul": "Sub Judul"
+    }
+  ]
+}
