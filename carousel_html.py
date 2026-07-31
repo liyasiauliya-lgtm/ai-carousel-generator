@@ -512,7 +512,7 @@ def generate_html(slides, embedded_bg, mode="script"):
     downloadBtn.disabled = false;
     prog.textContent = 'Done!';
     status.textContent = total + ' PNG berhasil didownload (1080x1350).';
-  }});  }});
+  }});
 }})();
 </script>
 </body>
