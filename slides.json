@@ -3,20 +3,32 @@
     {
       "num": 1,
       "type": "cover",
-      "judul": "Judul line 1\nJudul line 2",
-      "subjudul": "Sub Judul"
+      "judul": "S1 bisa Rp 300 jt.\nAICBT mulai Rp 8 jt/bln.",
+      "subjudul": "Jalur kuliah Australia yang lebih murah. Kenapa masih pilih yang mahal?"
     },
     {
       "num": 2,
       "type": "content",
-      "judul": "Judul line 1\nJudul line 2",
-      "subjudul": "Sub Judul"
+      "judul": "S1 di Indonesia\nberapa sih?",
+      "subjudul": "Kedokteran bisa tembus Rp 100–300 jt total. Belum biaya hidup 4 tahun. Banyak yang bayar mahal cuma karena 'udah dari sononya'."
     },
     {
       "num": 3,
+      "type": "content",
+      "judul": "Jalur AICBT:\nRp 8 jt/bln",
+      "subjudul": "1 tahun diploma online + 2 tahun S1 di Brisbane, partner CQU & Griffith. Masuk tahun ke-2 tanpa tes. Total 3 tahun."
+    },
+    {
+      "num": 4,
+      "type": "content",
+      "judul": "Part-time bisa\nRp 21 jt/bln",
+      "subjudul": "Visa pelajar Australia: kerja 20 jam/minggu, upah min AUD 28/jam. Cukup nutup biaya kuliah + hidup (±AUD 1.500/bln)."
+    },
+    {
+      "num": 5,
       "type": "cta",
-      "judul": "Judul line 1\nJudul line 2",
-      "subjudul": "Sub Judul"
+      "judul": "Mau dihitungin?",
+      "subjudul": "DM 'HITUNG' — kita itung bareng total biaya + rencana lo. Gratis, tanpa komitmen."
     }
   ]
 }
