@@ -154,12 +154,15 @@ def render_slide(slide: dict, index: int, mode: str = "script") -> str:
         sub_size = slide.get("sub_size", 30)
         judul = esc(slide.get("judul", "")).replace("\n", "<br>")
         subjudul = esc(slide.get("subjudul", "")).replace("\n", "<br>")
+        judul_lines = str(slide.get("judul", "")).count("\n") + 1
+        # Aturan jarak (dari Liya 2026-07-31): judul 1 baris → subjudul 700px; 2 baris → 768px
+        sub_top = slide.get("sub_top") or (700 if judul_lines <= 1 else 768)
         return f"""
     <div class="slide v3-slide card-slide {cls}{active}" id="slide-{n}">
       <img class="layer-frame" src="{fetch_b64(frame)}" alt="frame" crossorigin="anonymous" referrerpolicy="no-referrer">
       <img class="layer-front" src="{fetch_b64(front)}" alt="front" crossorigin="anonymous" referrerpolicy="no-referrer">
       <div class="judul-wrap"><div class="judul" style="color:{judul_color};font-size:{judul_size}px;">{judul}</div></div>
-      <div class="subjudul" style="color:{sub_color};font-size:{sub_size}px;">{subjudul}</div>
+      <div class="subjudul" style="color:{sub_color};font-size:{sub_size}px;top:{sub_top}px;">{subjudul}</div>
     </div>"""
 
     elems = []
@@ -295,7 +298,7 @@ def generate_html(slides, embedded_bg, mode="script"):
     line-height: 1.25; text-align: center; padding: 36px 40px;
   }}
   .card-slide .subjudul {{
-    position: absolute; top: 768px; left: 150px; width: 780px;
+    position: absolute; top: 700px; left: 150px; width: 780px;
     z-index: 3; text-align: center; color: #1f2430;
     font-size: 30px; line-height: 1.5; font-weight: 400;
   }}
@@ -437,6 +440,21 @@ def generate_html(slides, embedded_bg, mode="script"):
   }}
   window.addEventListener('resize', fitSlides);
   fitSlides();
+
+  /* Aturan jarak (Liya 2026-07-31): judul 1 baris → subjudul 700px; 2 baris → 768px.
+     Fallback buat judul yang wrap otomatis jadi 2 baris di layar (judul asli 1 baris tapi panjang). */
+  function fixSubPositions() {{
+    document.querySelectorAll('.card-slide').forEach(sl => {{
+      const j = sl.querySelector('.judul');
+      const sub = sl.querySelector('.subjudul');
+      if (!j || !sub) return;
+      const jh = j.getBoundingClientRect().height;
+      const lines = Math.round(jh / (parseFloat(getComputedStyle(j).fontSize) * 1.25));
+      if (lines >= 2 && !sub.style.top) sub.style.top = '768px';
+    }});
+  }}
+  window.addEventListener('load', fixSubPositions);
+  setTimeout(fixSubPositions, 300);
 
   /* ─── Export PNG 1080x1350 (html2canvas, stabil lintas-browser) ─── */
   const prog = document.getElementById('progress');
